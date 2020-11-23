@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.todogeoffreyremi.R
 
 class TaskListFragment : Fragment() {
+    private val taskList = listOf("Task 1", "Task 2", "Task 3")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
