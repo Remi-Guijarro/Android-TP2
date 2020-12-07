@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.todogeoffreyremi.tasklist.Task
 
 class TaskRepository {
-    private val tasksWebService = Api.taskWebService
+    private val taskWebService = Api.taskWebService
 
     // Ces deux variables encapsulent la même donnée:
     // [_taskList] est modifiable mais privée donc inaccessible à l'extérieur de cette classe
@@ -16,12 +16,22 @@ class TaskRepository {
 
     suspend fun refresh() {
         // Call HTTP (opération longue):
-        val tasksResponse = tasksWebService.getTasks()
+        val tasksResponse = taskWebService.getTasks()
         // À la ligne suivante, on a reçu la réponse de l'API:
         if (tasksResponse.isSuccessful) {
             val fetchedTasks = tasksResponse.body()
             // on modifie la valeur encapsulée, ce qui va notifier ses Observers et donc déclencher leur callback
             _taskList.value = fetchedTasks!!
+        }
+    }
+
+    suspend fun delete(task: Task) {
+        val response = taskWebService.deleteTask(task.id)
+        if (response.isSuccessful) {
+            val editableList = _taskList.value.orEmpty().toMutableList()
+            val position = editableList.indexOfFirst { task.id == it.id }
+            editableList.removeAt(position)
+            _taskList.value = editableList
         }
     }
 }

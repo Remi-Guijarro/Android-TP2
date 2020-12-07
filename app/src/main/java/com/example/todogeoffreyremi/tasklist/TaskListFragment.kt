@@ -20,7 +20,6 @@ import com.example.todogeoffreyremi.task.TaskActivity.Companion.EDIT_TASK_REQUES
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.TASK_KEY
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
-import java.util.*
 
 class TaskListFragment : Fragment() {
     private val taskList = mutableListOf(
@@ -65,8 +64,10 @@ class TaskListFragment : Fragment() {
         }
 
         taskListAdapter.onDeleteTask = { task ->
-            taskList.remove(task)
-            taskListAdapter.notifyDataSetChanged()
+            lifecycleScope.launch {
+                taskRepository.delete(task)
+                taskListAdapter.notifyDataSetChanged()
+            }
         }
 
         taskListAdapter.onEditClickListener = { task ->
