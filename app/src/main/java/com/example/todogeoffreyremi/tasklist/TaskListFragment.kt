@@ -6,15 +6,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
+import com.example.todogeoffreyremi.network.Api
 import com.example.todogeoffreyremi.task.TaskActivity
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.TASK_KEY
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 import java.util.*
 
 class TaskListFragment : Fragment() {
@@ -32,6 +36,16 @@ class TaskListFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_list, container, false)
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        lifecycleScope.launch {
+            val userInfo = Api.userService.getInfo().body()!!
+            val userTextView = view?.findViewById<TextView>(R.id.user_text_view)
+            userTextView?.text = "${userInfo.firstName} ${userInfo.lastName}"
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
