@@ -12,9 +12,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
 class TaskListFragment : Fragment() {
-    private val taskList = mutableListOf(Task(id = "id_1", title = "Task 1", description = "description 1"),
+    private val taskList = mutableListOf(
+        Task(id = "id_1", title = "Task 1", description = "description 1"),
         Task(id = "id_2", title = "Task 2"),
         Task(id = "id_3", title = "Task 3"))
+
+    private val taskListAdapter: TaskListAdapter = TaskListAdapter(taskList)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,12 +32,18 @@ class TaskListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = TaskListAdapter(taskList)
+        recyclerView.adapter = taskListAdapter
+
         val addButton = view.findViewById<FloatingActionButton>(R.id.addFAB)
         addButton.setOnClickListener {
             val task =Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
             taskList.add(task)
-            (recyclerView.adapter as TaskListAdapter).notifyItemInserted(taskList.lastIndex)
+            taskListAdapter.notifyItemInserted(taskList.lastIndex)
+        }
+
+        taskListAdapter.onDeleteTask = { task ->
+            taskList.remove(task)
+            taskListAdapter.notifyDataSetChanged()
         }
     }
 }
