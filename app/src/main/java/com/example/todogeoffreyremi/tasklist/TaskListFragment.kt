@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
 import com.example.todogeoffreyremi.network.Api
+import com.example.todogeoffreyremi.network.TaskRepository
 import com.example.todogeoffreyremi.task.TaskActivity
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
@@ -28,6 +29,8 @@ class TaskListFragment : Fragment() {
         Task(id = "id_3", title = "Task 3"))
 
     private val taskListAdapter: TaskListAdapter = TaskListAdapter(taskList)
+    private val taskRepository = TaskRepository()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +48,7 @@ class TaskListFragment : Fragment() {
             val userInfo = Api.userService.getInfo().body()!!
             val userTextView = view?.findViewById<TextView>(R.id.user_text_view)
             userTextView?.text = "${userInfo.firstName} ${userInfo.lastName}"
+            taskRepository.refresh()
         }
     }
 
@@ -70,6 +74,12 @@ class TaskListFragment : Fragment() {
             intent.putExtra(TASK_KEY, task)
             startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
         }
+
+        taskRepository.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            taskListAdapter.taskList.clear()
+            taskListAdapter.taskList.addAll(it)
+            taskListAdapter.notifyDataSetChanged()
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
