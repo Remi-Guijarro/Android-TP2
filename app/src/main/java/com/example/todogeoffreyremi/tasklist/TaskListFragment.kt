@@ -65,8 +65,10 @@ class TaskListFragment : Fragment() {
 
         taskListAdapter.onDeleteTask = { task ->
             lifecycleScope.launch {
-                taskRepository.delete(task)
-                taskListAdapter.notifyDataSetChanged()
+                val success = taskRepository.deleteTask(task)
+                if (success) {
+                    taskListAdapter.notifyDataSetChanged()
+                }
             }
         }
 

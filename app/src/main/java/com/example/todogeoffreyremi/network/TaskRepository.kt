@@ -25,7 +25,7 @@ class TaskRepository {
         }
     }
 
-    suspend fun delete(task: Task) {
+    suspend fun deleteTask(task: Task) : Boolean {
         val response = taskWebService.deleteTask(task.id)
         if (response.isSuccessful) {
             val editableList = _taskList.value.orEmpty().toMutableList()
@@ -33,6 +33,7 @@ class TaskRepository {
             editableList.removeAt(position)
             _taskList.value = editableList
         }
+        return response.isSuccessful
     }
 
     suspend fun updateTask(task: Task): Int {
