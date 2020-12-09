@@ -25,6 +25,17 @@ class TaskRepository {
         }
     }
 
+    suspend fun createTask(task: Task) : Boolean {
+        val response = taskWebService.createTask(task)
+        var success = false;
+        if (response.isSuccessful) {
+            val editableList = _taskList.value.orEmpty().toMutableList()
+            success = editableList.add(task)
+            _taskList.value = editableList
+        }
+        return success
+    }
+
     suspend fun deleteTask(task: Task) : Boolean {
         val response = taskWebService.deleteTask(task.id)
         if (response.isSuccessful) {

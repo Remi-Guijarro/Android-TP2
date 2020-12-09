@@ -92,8 +92,10 @@ class TaskListFragment : Fragment() {
             && resultCode == Activity.RESULT_OK
         ) {
             val newTask = data!!.getSerializableExtra(TASK_KEY) as Task
-            taskList.add(newTask)
-            taskListAdapter.notifyItemInserted(taskList.lastIndex)
+            lifecycleScope.launch {
+                taskRepository.createTask(newTask)
+                taskListAdapter.notifyItemInserted(taskList.lastIndex)
+            }
         }
         else if (requestCode == EDIT_TASK_REQUEST_CODE
             && resultCode == Activity.RESULT_OK
