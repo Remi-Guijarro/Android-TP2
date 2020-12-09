@@ -10,7 +10,7 @@ object Api {
 
     // constantes qui serviront à faire les requêtes
     private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
-    private const val TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozMDMsImV4cCI6MTYzODg5MDc5MX0.3ir1W-D-kVG1QuPy2EA-3p9VPXoAYDBh3DMD052Ny5Y"
+    private const val TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozMDMsImV4cCI6MTYzOTA1NTA2NX0.XGRhK59WpHOcPUMlOUtgfeK0W32xSrWXUZVDZPcIb4M"
 
     // on construit une instance de parseur de JSON:
     private val jsonSerializer = Json {

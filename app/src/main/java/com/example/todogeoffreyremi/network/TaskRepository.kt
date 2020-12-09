@@ -34,4 +34,17 @@ class TaskRepository {
             _taskList.value = editableList
         }
     }
+
+    suspend fun updateTask(task: Task): Int {
+        val response = taskWebService.updateTask(task)
+        var position = -1
+        if (response.isSuccessful) {
+            val updatedTask = response.body()
+            val editableList = _taskList.value.orEmpty().toMutableList()
+            position = editableList.indexOfFirst { updatedTask!!.id == it.id }
+            editableList[position] = updatedTask!!
+            _taskList.value = editableList
+        }
+        return position
+    }
 }
