@@ -25,7 +25,7 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
     }
 
     var onDeleteTask: ((Task) -> Unit)? = null
-    var onEditClickListener: ((Task) -> Unit)? = null
+    var onEditTask: ((Task) -> Unit)? = null
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(task: Task) {
@@ -44,7 +44,7 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
 
             val editButton = itemView.findViewById<ImageButton>(R.id.task_edit)
             editButton.setOnClickListener {
-                onEditClickListener?.invoke(task)
+                onEditTask?.invoke(task)
             }
         }
     }

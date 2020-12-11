@@ -20,7 +20,6 @@ import com.example.todogeoffreyremi.task.TaskActivity.Companion.EDIT_TASK_REQUES
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.TASK_KEY
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
-import java.util.*
 
 class TaskListFragment : Fragment() {
     private val taskList = mutableListOf(
@@ -54,7 +53,7 @@ class TaskListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = taskListAdapter
 
@@ -65,14 +64,18 @@ class TaskListFragment : Fragment() {
         }
 
         taskListAdapter.onDeleteTask = { task ->
-            taskList.remove(task)
-            taskListAdapter.notifyDataSetChanged()
+            lifecycleScope.launch {
+                val success = taskRepository.deleteTask(task)
+                if (success) {
+                    taskListAdapter.notifyDataSetChanged()
+                }
+            }
         }
 
-        taskListAdapter.onEditClickListener = { task ->
-            val intent = Intent(activity, TaskActivity::class.java)
-            intent.putExtra(TASK_KEY, task)
-            startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
+        taskListAdapter.onEditTask = { task ->
+                val intent = Intent(activity, TaskActivity::class.java)
+                intent.putExtra(TASK_KEY, task)
+                startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
         }
 
         taskRepository.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
@@ -89,18 +92,19 @@ class TaskListFragment : Fragment() {
             && resultCode == Activity.RESULT_OK
         ) {
             val newTask = data!!.getSerializableExtra(TASK_KEY) as Task
-            taskList.add(newTask)
-            taskListAdapter.notifyItemInserted(taskList.lastIndex)
+            lifecycleScope.launch {
+                taskRepository.createTask(newTask)
+                taskListAdapter.notifyItemInserted(taskList.lastIndex)
+            }
         }
         else if (requestCode == EDIT_TASK_REQUEST_CODE
             && resultCode == Activity.RESULT_OK
         ) {
             val updatedTask = data!!.getSerializableExtra(TASK_KEY) as Task
-            for (i in 0 until taskList.size) {
-                if (taskList[i].id == updatedTask.id) {
-                    taskList[i] = updatedTask
-                    taskListAdapter.notifyItemChanged(i)
-                    break
+            lifecycleScope.launch {
+                val position = taskRepository.updateTask(updatedTask)
+                if (position != -1) {
+                    taskListAdapter.notifyItemChanged(position)
                 }
             }
         }
