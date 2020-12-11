@@ -22,7 +22,9 @@
             android:id="@+id/task_description"
             android:background="@android:color/holo_blue_bright"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@{task.description}"/>
+
 
         <ImageButton
             android:id="@+id/task_delete_button"

@@ -22,7 +22,6 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
             return oldItem.title == newItem.title &&
                     oldItem.description == newItem.description
         }
-
     }
 
     var onDeleteTask: ((Task) -> Unit)? = null
@@ -33,11 +32,7 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
         private val binding = ItemTaskBinding.bind(itemView)
 
         fun bind(task: Task) {
-            itemView.apply { // `apply {}` permet d'éviter de répéter `itemView.*`
-                //binding.taskTitle.text = task.title
-
-                binding.taskDescription.text = task.description
-            }
+            binding.task = task
 
             binding.taskDeleteButton.setOnClickListener {
                 onDeleteTask?.invoke(task)
