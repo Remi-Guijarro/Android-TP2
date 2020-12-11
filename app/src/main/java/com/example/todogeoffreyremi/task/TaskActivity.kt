@@ -26,8 +26,8 @@ class TaskActivity : AppCompatActivity() {
         val id = task?.id ?: UUID.randomUUID().toString()
 
         binding.addTaskConfirmButton.setOnClickListener {
-            val title = binding.addTaskTitle.toString()
-            val description = binding.addTaskDescription.toString()
+            val title = binding.addTaskTitle.text.toString()
+            val description = binding.addTaskDescription.text.toString()
 
             val newTask = Task(id = id, title = title, description = description)
             val intent = Intent()
