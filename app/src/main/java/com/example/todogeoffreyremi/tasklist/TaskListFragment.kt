@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
+import com.example.todogeoffreyremi.databinding.FragmentTaskListBinding
 import com.example.todogeoffreyremi.network.Api
 import com.example.todogeoffreyremi.network.TaskRepository
 import com.example.todogeoffreyremi.task.TaskActivity
@@ -22,21 +23,25 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
 class TaskListFragment : Fragment() {
+    // View binding support in Fragment
+    private var _binding: FragmentTaskListBinding? = null
+    private val binding get() = _binding!!
+
     private val taskList = mutableListOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
         Task(id = "id_2", title = "Task 2"),
         Task(id = "id_3", title = "Task 3"))
-
     private val taskListAdapter: TaskListAdapter = TaskListAdapter(taskList)
-    private val taskRepository = TaskRepository()
 
+    private val taskRepository = TaskRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_task_list, container, false)
+    ): View {
+        _binding = FragmentTaskListBinding.inflate(inflater, container, false)
+        val rootView = binding.root
         return rootView
     }
 
@@ -53,11 +58,12 @@ class TaskListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+        val recyclerView = binding.recyclerView
+
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = taskListAdapter
 
-        val addButton = view.findViewById<FloatingActionButton>(R.id.addFAB)
+        val addButton = binding.addTaskButton
         addButton.setOnClickListener {
             val intent = Intent(activity, TaskActivity::class.java)
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
@@ -108,5 +114,10 @@ class TaskListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

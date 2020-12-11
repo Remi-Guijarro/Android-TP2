@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
+import com.example.todogeoffreyremi.databinding.ItemTaskBinding
 
 class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
 
@@ -28,21 +29,24 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
     var onEditTask: ((Task) -> Unit)? = null
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // Support binding in view holder
+        private val binding = ItemTaskBinding.bind(itemView)
+
         fun bind(task: Task) {
             itemView.apply { // `apply {}` permet d'éviter de répéter `itemView.*`
-                val titleTextView = itemView.findViewById<TextView>(R.id.task_title)
+                val titleTextView = binding.taskTitle
                 titleTextView.text = task.title
 
-                val descriptionTestView = itemView.findViewById<TextView>(R.id.task_description)
+                val descriptionTestView = binding.taskDescription
                 descriptionTestView.text = task.description
             }
 
-            val deleteButton = itemView.findViewById<ImageButton>(R.id.task_delete)
+            val deleteButton = binding.taskDelete
             deleteButton.setOnClickListener {
                 onDeleteTask?.invoke(task)
             }
 
-            val editButton = itemView.findViewById<ImageButton>(R.id.task_edit)
+            val editButton = binding.taskEdit
             editButton.setOnClickListener {
                 onEditTask?.invoke(task)
             }
