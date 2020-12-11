@@ -19,13 +19,13 @@
         android:layout_height="wrap_content" />
 
     <ImageButton
-        android:id="@+id/task_delete"
+        android:id="@+id/task_delete_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_delete" />
 
     <ImageButton
-        android:id="@+id/task_edit"
+        android:id="@+id/task_edit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_edit" />
