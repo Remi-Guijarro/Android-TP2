@@ -34,7 +34,7 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
 
         fun bind(task: Task) {
             itemView.apply { // `apply {}` permet d'éviter de répéter `itemView.*`
-                binding.taskTitle.text = task.title
+                //binding.taskTitle.text = task.title
 
                 binding.taskDescription.text = task.description
             }
