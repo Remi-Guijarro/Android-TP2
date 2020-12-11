@@ -5,10 +5,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
 
-class TaskListAdapter (val taskList: MutableList<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
+
+    companion object DiffCallback : DiffUtil.ItemCallback<Task>() {
+        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+            return oldItem.id === newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+            return oldItem.title == newItem.title &&
+                    oldItem.description == newItem.description
+        }
+
+    }
 
     var onDeleteTask: ((Task) -> Unit)? = null
     var onEditClickListener: ((Task) -> Unit)? = null
@@ -39,7 +53,6 @@ class TaskListAdapter (val taskList: MutableList<Task>) : RecyclerView.Adapter<T
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(itemView)
     }
-
 
     override fun getItemCount(): Int {
         return taskList.size
