@@ -11,7 +11,7 @@ import com.example.todogeoffreyremi.R
 class TaskListAdapter (val taskList: MutableList<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
 
     var onDeleteTask: ((Task) -> Unit)? = null
-    var onEditClickListener: ((Task) -> Unit)? = null
+    var onEditTask: ((Task) -> Unit)? = null
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(task: Task) {
@@ -30,7 +30,7 @@ class TaskListAdapter (val taskList: MutableList<Task>) : RecyclerView.Adapter<T
 
             val editButton = itemView.findViewById<ImageButton>(R.id.task_edit)
             editButton.setOnClickListener {
-                onEditClickListener?.invoke(task)
+                onEditTask?.invoke(task)
             }
         }
     }
