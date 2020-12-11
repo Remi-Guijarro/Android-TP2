@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +32,9 @@ class TaskListFragment : Fragment() {
         Task(id = "id_1", title = "Task 1", description = "description 1"),
         Task(id = "id_2", title = "Task 2"),
         Task(id = "id_3", title = "Task 3"))
-    private val taskListAdapter: TaskListAdapter = TaskListAdapter(taskList)
+
+    val taskListAdapter: TaskListAdapter = TaskListAdapter(taskList)
+    val layoutManager: LinearLayoutManager =  LinearLayoutManager(activity)
 
     private val taskRepository = TaskRepository()
 
@@ -58,10 +61,8 @@ class TaskListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView = binding.recyclerView
 
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = taskListAdapter
+        binding.taskListFragment = this
 
         val addButton = binding.addTaskButton
         addButton.setOnClickListener {
