@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <variable name="user" type="com.example.todogeoffreyremi.network.UserInfo"/>
         <variable name="taskListFragment" type="com.example.todogeoffreyremi.tasklist.TaskListFragment"/>
     </data>
 
@@ -14,7 +15,7 @@
             android:id="@+id/user_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@{user.lastName + ' ' + user.lastName}"
             android:gravity="center_horizontal"
             android:padding="5dp"
             tools:layout_editor_absoluteX="102dp"

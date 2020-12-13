@@ -3,18 +3,19 @@ package com.example.todogeoffreyremi.tasklist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
 import com.example.todogeoffreyremi.databinding.ItemTaskBinding
+import kotlin.properties.Delegates
 
-class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
+class TaskListAdapter() : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
+    var taskList: List<Task> by Delegates.observable(emptyList()) { _, _, _ ->
+        notifyDataSetChanged()
+    }
 
+    // Todo (geoffrey): Why is this never called ?
     companion object DiffCallback : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
             return oldItem.id === newItem.id
@@ -58,5 +59,4 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(taskList[position])
     }
-
 }
