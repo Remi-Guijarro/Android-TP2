@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todogeoffreyremi.R
@@ -43,8 +45,8 @@ class TaskListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.refreshTasks()
-        taskListAdapter.notifyDataSetChanged()
+        viewModel.loadTasks()
+        //taskListAdapter.notifyDataSetChanged()
         // Todo (geoffrey): Should we move this logic
         lifecycleScope.launch {
             val userInfo = Api.userService.getInfo().body()!!
@@ -66,7 +68,6 @@ class TaskListFragment : Fragment() {
 
         taskListAdapter.onDeleteTask = { task ->
             viewModel.deleteTask(task)
-            taskListAdapter.notifyDataSetChanged()
         }
 
         taskListAdapter.onEditTask = { task ->
@@ -75,10 +76,14 @@ class TaskListFragment : Fragment() {
                 startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
         }
 
-        viewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            taskListAdapter.taskList.clear()
-            taskListAdapter.taskList.addAll(it)
+        // Todo (geoffrey): 'this' error
+/*        viewModel.taskList.observe(this, Observer { newList ->
+            taskListAdapter.taskList = newList.toMutableList()
             taskListAdapter.notifyDataSetChanged()
+        }))*/
+
+        viewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newList ->
+            taskListAdapter.taskList = newList.toMutableList()
         })
     }
 
@@ -90,14 +95,12 @@ class TaskListFragment : Fragment() {
         ) {
             val newTask = data!!.getSerializableExtra(TASK_KEY) as Task
             viewModel.createTask(newTask)
-            taskListAdapter.notifyDataSetChanged()
         }
         else if (requestCode == EDIT_TASK_REQUEST_CODE
             && resultCode == Activity.RESULT_OK
         ) {
             val updatedTask = data!!.getSerializableExtra(TASK_KEY) as Task
             viewModel.updateTask(updatedTask)
-            taskListAdapter.notifyDataSetChanged()
         }
     }
 

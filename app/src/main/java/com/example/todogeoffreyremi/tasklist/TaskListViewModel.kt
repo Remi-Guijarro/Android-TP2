@@ -20,9 +20,9 @@ class TaskListViewModel : ViewModel() {
 
     private fun getMutableList() = _taskList.value.orEmpty().toMutableList()
 
-    fun refreshTasks() {
+    fun loadTasks() {
         viewModelScope.launch {
-            val tasks = taskRepository.getTasks()
+            val tasks = taskRepository.loadTasks()
             _taskList.value = tasks.orEmpty()
         }
     }

@@ -5,7 +5,7 @@ import com.example.todogeoffreyremi.tasklist.Task
 class TaskRepository {
     private val taskWebService = Api.taskWebService
 
-    suspend fun getTasks(): List<Task>? {
+    suspend fun loadTasks(): List<Task>? {
         val response = taskWebService.getTasks()
         return if (response.isSuccessful) response.body() else null
     }

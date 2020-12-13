@@ -8,8 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
 import com.example.todogeoffreyremi.databinding.ItemTaskBinding
+import kotlin.properties.Delegates
 
-class TaskListAdapter(val taskList: MutableList<Task> = mutableListOf()) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
+class TaskListAdapter() : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
+    var taskList: List<Task> by Delegates.observable(emptyList()) { _, _, _ ->
+        notifyDataSetChanged()
+    }
 
     // Todo (geoffrey): Why is this never called ?
     companion object DiffCallback : DiffUtil.ItemCallback<Task>() {
@@ -55,5 +59,4 @@ class TaskListAdapter(val taskList: MutableList<Task> = mutableListOf()) : ListA
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(taskList[position])
     }
-
 }
