@@ -1,8 +1,8 @@
-package com.example.todogeoffreyremi
+package com.dm.todok
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.todogeoffreyremi.databinding.ActivityMainBinding
+import com.dm.todok.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     // View binding support in Activities

@@ -1,10 +1,10 @@
-package com.example.todogeoffreyremi.tasklist
+package com.dm.todok.tasklist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todogeoffreyremi.network.TaskRepository
+import com.dm.todok.network.TaskRepository
 import kotlinx.coroutines.launch
 
 class TaskListViewModel : ViewModel() {

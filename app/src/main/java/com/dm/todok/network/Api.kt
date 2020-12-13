@@ -1,4 +1,4 @@
-package com.example.todogeoffreyremi.network
+package com.dm.todok.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json

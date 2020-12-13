@@ -1,6 +1,6 @@
-package com.example.todogeoffreyremi.network
+package com.dm.todok.network
 
-import com.example.todogeoffreyremi.tasklist.Task
+import com.dm.todok.tasklist.Task
 
 class TaskRepository {
     private val taskWebService = Api.taskWebService

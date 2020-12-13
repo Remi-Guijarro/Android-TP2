@@ -1,6 +1,6 @@
-package com.example.todogeoffreyremi.network
+package com.dm.todok.network
 
-import com.example.todogeoffreyremi.tasklist.Task
+import com.dm.todok.tasklist.Task
 import retrofit2.Response
 import retrofit2.http.*
 

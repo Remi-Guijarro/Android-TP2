@@ -1,4 +1,4 @@
-package com.example.todogeoffreyremi.network
+package com.dm.todok.network
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

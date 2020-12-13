@@ -1,15 +1,12 @@
-package com.example.todogeoffreyremi.task
+package com.dm.todok.task
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.example.todogeoffreyremi.R
-import com.example.todogeoffreyremi.databinding.ActivityTaskBinding
-import com.example.todogeoffreyremi.databinding.FragmentTaskListBinding
-import com.example.todogeoffreyremi.tasklist.Task
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.dm.todok.R
+import com.dm.todok.databinding.ActivityTaskBinding
+import com.dm.todok.tasklist.Task
 import java.util.*
 
 class TaskActivity : AppCompatActivity() {
