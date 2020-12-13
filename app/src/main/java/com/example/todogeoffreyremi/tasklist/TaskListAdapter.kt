@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
 import com.example.todogeoffreyremi.databinding.ItemTaskBinding
 
-class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
+class TaskListAdapter(val taskList: MutableList<Task> = mutableListOf()) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
 
     // Todo (geoffrey): Why is this never called ?
     companion object DiffCallback : DiffUtil.ItemCallback<Task>() {
