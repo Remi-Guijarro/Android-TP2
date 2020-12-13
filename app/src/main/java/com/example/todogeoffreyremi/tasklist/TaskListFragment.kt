@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todogeoffreyremi.R
 import com.example.todogeoffreyremi.databinding.FragmentTaskListBinding
 import com.example.todogeoffreyremi.network.Api
-import com.example.todogeoffreyremi.network.TaskRepository
 import com.example.todogeoffreyremi.task.TaskActivity
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.example.todogeoffreyremi.task.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
@@ -26,15 +25,11 @@ class TaskListFragment : Fragment() {
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
 
-    private val taskList = mutableListOf(
-        Task(id = "id_1", title = "Task 1", description = "description 1"),
-        Task(id = "id_2", title = "Task 2"),
-        Task(id = "id_3", title = "Task 3"))
-
-    val taskListAdapter: TaskListAdapter = TaskListAdapter(taskList)
+    val taskListAdapter: TaskListAdapter = TaskListAdapter()
     val layoutManager: LinearLayoutManager =  LinearLayoutManager(activity)
 
-    private val viewModel = TaskListViewModel()
+    // Todo (geoffrey): difference with val viewModel = TaskListViewModel()
+    private val viewModel: TaskListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
