@@ -1,4 +1,4 @@
-package com.example.todogeoffreyremi
+package com.dm.todok
 
 import org.junit.Test
 

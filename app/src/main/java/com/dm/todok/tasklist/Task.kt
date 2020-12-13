@@ -1,4 +1,4 @@
-package com.example.todogeoffreyremi.tasklist
+package com.dm.todok.tasklist
 
 import kotlinx.serialization.SerialName
 

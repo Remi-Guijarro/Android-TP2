@@ -1,4 +1,4 @@
-package com.example.todogeoffreyremi.network
+package com.dm.todok.network
 
 import retrofit2.Response
 import retrofit2.http.GET

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <variable name="user" type="com.example.todogeoffreyremi.network.UserInfo"/>
-        <variable name="taskListFragment" type="com.example.todogeoffreyremi.tasklist.TaskListFragment"/>
+        <variable name="user" type="com.dm.todok.network.UserInfo"/>
+        <variable name="taskListFragment" type="com.dm.todok.tasklist.TaskListFragment"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
