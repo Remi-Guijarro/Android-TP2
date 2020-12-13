@@ -46,12 +46,11 @@ class TaskListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.loadTasks()
-        //taskListAdapter.notifyDataSetChanged()
+
         // Todo (geoffrey): Should we move this logic
         lifecycleScope.launch {
-            val userInfo = Api.userService.getInfo().body()!!
-            val userTextView = view?.findViewById<TextView>(R.id.user_text_view)
-            userTextView?.text = "${userInfo.firstName} ${userInfo.lastName}"
+            val userInfo = Api.userService.getInfo().body()
+            binding.user = userInfo
         }
     }
 
