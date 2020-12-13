@@ -5,7 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todogeoffreyremi.R
@@ -22,7 +24,6 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
             return oldItem.title == newItem.title &&
                     oldItem.description == newItem.description
         }
-
     }
 
     var onDeleteTask: ((Task) -> Unit)? = null
@@ -33,11 +34,7 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
         private val binding = ItemTaskBinding.bind(itemView)
 
         fun bind(task: Task) {
-            itemView.apply { // `apply {}` permet d'éviter de répéter `itemView.*`
-                binding.taskTitle.text = task.title
-
-                binding.taskDescription.text = task.description
-            }
+            binding.task = task
 
             binding.taskDeleteButton.setOnClickListener {
                 onDeleteTask?.invoke(task)
@@ -61,4 +58,5 @@ class TaskListAdapter(val taskList: MutableList<Task>) : ListAdapter<Task, TaskL
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(taskList[position])
     }
+
 }
