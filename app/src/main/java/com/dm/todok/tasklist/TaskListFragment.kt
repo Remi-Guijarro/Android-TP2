@@ -10,12 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.dm.todok.databinding.FragmentTaskListBinding
 import com.dm.todok.network.Api
 import com.dm.todok.task.TaskActivity
 import com.dm.todok.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.dm.todok.task.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
 import com.dm.todok.task.TaskActivity.Companion.TASK_KEY
+import com.dm.todok.userinfo.UserInfoActivity
 import kotlinx.coroutines.launch
 
 class TaskListFragment : Fragment() {
@@ -43,11 +46,15 @@ class TaskListFragment : Fragment() {
         super.onResume()
         viewModel.loadTasks()
 
-        // Todo (geoffrey): Should we move this logic
+        // Todo (geoffrey): move to user's view model
         lifecycleScope.launch {
-            val userInfo = Api.userService.getInfo().body()
+            val userInfo = Api.userWebService.getInfo().body()
             binding.user = userInfo
+            binding.userAvatar.load(userInfo?.avatar) {
+                transformations(CircleCropTransformation())
+            }
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,6 +68,11 @@ class TaskListFragment : Fragment() {
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
 
+        binding.userAvatar.setOnClickListener {
+            val intent = Intent(activity, UserInfoActivity::class.java)
+            startActivityForResult(intent, 0)
+        }
+
         taskListAdapter.onDeleteTask = { task ->
             viewModel.deleteTask(task)
         }
@@ -71,14 +83,8 @@ class TaskListFragment : Fragment() {
                 startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
         }
 
-        // Todo (geoffrey): 'this' error
-/*        viewModel.taskList.observe(this, Observer { newList ->
-            taskListAdapter.taskList = newList.toMutableList()
-            taskListAdapter.notifyDataSetChanged()
-        }))*/
-
         viewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newList ->
-            taskListAdapter.taskList = newList.toMutableList()
+            taskListAdapter.submitList(newList)
         })
     }
 

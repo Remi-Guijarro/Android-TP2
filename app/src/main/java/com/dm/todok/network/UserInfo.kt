@@ -11,5 +11,8 @@ data class UserInfo(
     val firstName: String,
 
     @SerialName("lastname")
-    val lastName: String
+    val lastName: String,
+
+    @SerialName("avatar")
+    val avatar: String?
 )
