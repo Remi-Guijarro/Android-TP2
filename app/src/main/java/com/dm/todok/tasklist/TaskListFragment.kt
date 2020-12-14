@@ -45,6 +45,10 @@ class TaskListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        refreshModels()
+    }
+
+    private fun refreshModels() {
         taskListViewModel.refreshTasks()
         userViewModel.refreshUserInfo()
     }
@@ -52,16 +56,25 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userViewModel.userInfo.observe(viewLifecycleOwner, {
-            binding.userViewModel = userViewModel
-        })
-        binding.taskListViewModel = taskListViewModel
+        bindModels()
         binding.recyclerView.adapter = taskListAdapter
+
+        setClickListeners()
+        setAdapterCallbacks()
 
         taskListViewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newList ->
             taskListAdapter.submitList(newList)
         })
+    }
 
+    private fun bindModels() {
+        userViewModel.userInfo.observe(viewLifecycleOwner, {
+            binding.userViewModel = userViewModel
+        })
+        binding.taskListViewModel = taskListViewModel
+    }
+
+    private fun setClickListeners() {
         binding.addTaskButton.setOnClickListener {
             val intent = Intent(activity, TaskActivity::class.java)
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
@@ -71,7 +84,9 @@ class TaskListFragment : Fragment() {
             val intent = Intent(activity, UserInfoActivity::class.java)
             startActivityForResult(intent, 0)
         }
+    }
 
+    private fun setAdapterCallbacks() {
         taskListAdapter.onDeleteTask = { task ->
             taskListViewModel.deleteTask(task)
         }
