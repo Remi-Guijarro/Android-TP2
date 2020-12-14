@@ -1,4 +1,4 @@
-package com.dm.todok.task
+package com.dm.todok.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.dm.todok.R
 import com.dm.todok.databinding.ActivityTaskBinding
-import com.dm.todok.tasklist.Task
+import com.dm.todok.model.Task
 import java.util.*
 
 class TaskActivity : AppCompatActivity() {

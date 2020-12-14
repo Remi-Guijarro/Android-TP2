@@ -1,6 +1,7 @@
-package com.dm.todok.network
+package com.dm.todok.data
 
-import com.dm.todok.tasklist.Task
+import com.dm.todok.network.Api
+import com.dm.todok.model.Task
 
 class TaskRepository {
     private val taskWebService = Api.taskWebService

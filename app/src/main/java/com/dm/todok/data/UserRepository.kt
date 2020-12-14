@@ -1,7 +1,9 @@
-package com.dm.todok.network
+package com.dm.todok.data
 
 import android.net.Uri
 import androidx.core.net.toFile
+import com.dm.todok.network.Api
+import com.dm.todok.model.UserInfo
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 

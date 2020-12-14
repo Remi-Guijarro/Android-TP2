@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <variable name="userViewModel" type="com.dm.todok.UserViewModel"/>
-        <variable name="taskListViewModel" type="com.dm.todok.tasklist.TaskListViewModel"/>
+        <variable name="userViewModel" type="com.dm.todok.ui.user.UserViewModel"/>
+        <variable name="taskListViewModel" type="com.dm.todok.ui.tasklist.TaskListViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

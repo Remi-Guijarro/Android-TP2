@@ -1,12 +1,12 @@
-package com.dm.todok
+package com.dm.todok.ui.user
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dm.todok.network.UserInfo
-import com.dm.todok.network.UserRepository
+import com.dm.todok.model.UserInfo
+import com.dm.todok.data.UserRepository
 import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {

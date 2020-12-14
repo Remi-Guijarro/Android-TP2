@@ -1,4 +1,4 @@
-package com.dm.todok
+package com.dm.todok.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

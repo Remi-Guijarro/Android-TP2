@@ -1,5 +1,6 @@
 package com.dm.todok.network
 
+import com.dm.todok.model.UserInfo
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.GET

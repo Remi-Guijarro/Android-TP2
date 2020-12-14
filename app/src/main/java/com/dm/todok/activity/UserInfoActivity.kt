@@ -1,4 +1,4 @@
-package com.dm.todok.userinfo
+package com.dm.todok.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -12,17 +12,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import com.dm.todok.UserViewModel
+import com.dm.todok.ui.user.UserViewModel
 import com.dm.todok.databinding.ActivityUserinfoBinding
-import com.dm.todok.network.Api
-import com.dm.todok.network.UserWebService
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 class UserInfoActivity: AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.dm.todok.tasklist
+package com.dm.todok.ui.tasklist
 
 import android.app.Activity
 import android.content.Intent
@@ -7,20 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import coil.load
-import coil.transform.CircleCropTransformation
-import com.dm.todok.UserViewModel
+import com.dm.todok.ui.user.UserViewModel
 import com.dm.todok.databinding.FragmentTaskListBinding
-import com.dm.todok.network.Api
-import com.dm.todok.task.TaskActivity
-import com.dm.todok.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
-import com.dm.todok.task.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
-import com.dm.todok.task.TaskActivity.Companion.TASK_KEY
-import com.dm.todok.userinfo.UserInfoActivity
-import kotlinx.coroutines.launch
+import com.dm.todok.model.Task
+import com.dm.todok.activity.TaskActivity
+import com.dm.todok.activity.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
+import com.dm.todok.activity.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
+import com.dm.todok.activity.TaskActivity.Companion.TASK_KEY
+import com.dm.todok.activity.UserInfoActivity
 
 class TaskListFragment : Fragment() {
     // View binding support in Fragment
@@ -29,7 +24,6 @@ class TaskListFragment : Fragment() {
 
     private val taskListAdapter: TaskListAdapter = TaskListAdapter()
 
-    // Todo (geoffrey): difference with val viewModel = TaskListViewModel()
     private val taskListViewModel: TaskListViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
 
