@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -46,15 +47,15 @@ class TaskListFragment : Fragment() {
         super.onResume()
         viewModel.loadTasks()
 
-        // Todo (geoffrey): Should we move this logic
+        // Todo (geoffrey): move to user's view model
         lifecycleScope.launch {
-            val userInfo = Api.userService.getInfo().body()
+            val userInfo = Api.userWebService.getInfo().body()
             binding.user = userInfo
+            binding.userAvatar.load(userInfo?.avatar) {
+                transformations(CircleCropTransformation())
+            }
         }
 
-        binding.userAvatar.load("https://s1.qwant.com/thumbr/0x0/2/1/a5246dfdd4da59903560ad9218ed12dad6cdc771e9b88970afdf4c5c6ecf47/Nicolas-Sarkozy-@-France-24.jpg?u=https%3A%2F%2Fbeninwebtv.com%2Fwp-content%2Fuploads%2F2020%2F07%2FNicolas-Sarkozy-%40-France-24.jpg&q=0&b=1&p=0&a=1") {
-            transformations(CircleCropTransformation())
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,14 +84,8 @@ class TaskListFragment : Fragment() {
                 startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
         }
 
-        // Todo (geoffrey): 'this' error
-/*        viewModel.taskList.observe(this, Observer { newList ->
-            taskListAdapter.taskList = newList.toMutableList()
-            taskListAdapter.notifyDataSetChanged()
-        }))*/
-
         viewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newList ->
-            taskListAdapter.taskList = newList.toMutableList()
+            taskListAdapter.submitList(newList)
         })
     }
 

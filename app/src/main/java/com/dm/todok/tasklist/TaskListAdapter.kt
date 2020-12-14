@@ -11,11 +11,6 @@ import com.dm.todok.databinding.ItemTaskBinding
 import kotlin.properties.Delegates
 
 class TaskListAdapter() : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
-    var taskList: List<Task> by Delegates.observable(emptyList()) { _, _, _ ->
-        notifyDataSetChanged()
-    }
-
-    // Todo (geoffrey): Why is this never called ?
     companion object DiffCallback : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
             return oldItem.id === newItem.id
@@ -53,10 +48,10 @@ class TaskListAdapter() : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(Diff
     }
 
     override fun getItemCount(): Int {
-        return taskList.size
+        return currentList.size
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        holder.bind(taskList[position])
+        holder.bind(currentList[position])
     }
 }
