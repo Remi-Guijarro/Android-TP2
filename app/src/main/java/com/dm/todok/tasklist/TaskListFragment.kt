@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.dm.todok.databinding.FragmentTaskListBinding
@@ -26,11 +25,10 @@ class TaskListFragment : Fragment() {
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
 
-    val taskListAdapter: TaskListAdapter = TaskListAdapter()
-    val layoutManager: LinearLayoutManager =  LinearLayoutManager(activity)
+    private val taskListAdapter: TaskListAdapter = TaskListAdapter()
 
     // Todo (geoffrey): difference with val viewModel = TaskListViewModel()
-    private val viewModel: TaskListViewModel by viewModels()
+    private val taskListViewModel: TaskListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +42,7 @@ class TaskListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadTasks()
+        taskListViewModel.loadTasks()
 
         // Todo (geoffrey): move to user's view model
         lifecycleScope.launch {
@@ -54,14 +52,13 @@ class TaskListFragment : Fragment() {
                 transformations(CircleCropTransformation())
             }
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Todo (geoffrey): Bind to Fragment ?
-        binding.taskListFragment = this
+        binding.taskListViewModel = taskListViewModel
+        binding.recyclerView.adapter = taskListAdapter
 
         binding.addTaskButton.setOnClickListener {
             val intent = Intent(activity, TaskActivity::class.java)
@@ -74,18 +71,14 @@ class TaskListFragment : Fragment() {
         }
 
         taskListAdapter.onDeleteTask = { task ->
-            viewModel.deleteTask(task)
+            taskListViewModel.deleteTask(task)
         }
 
         taskListAdapter.onEditTask = { task ->
-                val intent = Intent(activity, TaskActivity::class.java)
-                intent.putExtra(TASK_KEY, task)
-                startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
+            val intent = Intent(activity, TaskActivity::class.java)
+            intent.putExtra(TASK_KEY, task)
+            startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
         }
-
-        viewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newList ->
-            taskListAdapter.submitList(newList)
-        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -95,13 +88,13 @@ class TaskListFragment : Fragment() {
             && resultCode == Activity.RESULT_OK
         ) {
             val newTask = data!!.getSerializableExtra(TASK_KEY) as Task
-            viewModel.createTask(newTask)
+            taskListViewModel.createTask(newTask)
         }
         else if (requestCode == EDIT_TASK_REQUEST_CODE
             && resultCode == Activity.RESULT_OK
         ) {
             val updatedTask = data!!.getSerializableExtra(TASK_KEY) as Task
-            viewModel.updateTask(updatedTask)
+            taskListViewModel.updateTask(updatedTask)
         }
     }
 

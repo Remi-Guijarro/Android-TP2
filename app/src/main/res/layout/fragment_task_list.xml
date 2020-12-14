@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="user" type="com.dm.todok.network.UserInfo"/>
-        <variable name="taskListFragment" type="com.dm.todok.tasklist.TaskListFragment"/>
+        <variable name="taskListViewModel" type="com.dm.todok.tasklist.TaskListViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <ImageView
                 android:id="@+id/user_avatar"
                 android:layout_width="wrap_content"
@@ -48,8 +47,8 @@
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            layout_manager="@{taskListFragment.layoutManager}"
-            task_list_adapter="@{taskListFragment.taskListAdapter}"
+            app:observe_list="@{taskListViewModel.taskList}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
