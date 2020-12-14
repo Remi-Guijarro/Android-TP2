@@ -50,8 +50,10 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindModels()
         binding.recyclerView.adapter = taskListAdapter
+        binding.lifecycleOwner = this
+
+        bindModels()
 
         setClickListeners()
         setAdapterCallbacks()
@@ -63,9 +65,10 @@ class TaskListFragment : Fragment() {
 
     private fun bindModels() {
         userViewModel.userInfo.observe(viewLifecycleOwner, {
+            binding.executePendingBindings()
             binding.userViewModel = userViewModel
-
         })
+        binding.userViewModel = userViewModel
         binding.taskListViewModel = taskListViewModel
     }
 

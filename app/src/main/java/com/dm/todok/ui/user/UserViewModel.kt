@@ -34,6 +34,7 @@ class UserViewModel : ViewModel() {
     fun updateAvatar(url: Uri) {
         viewModelScope.launch {
             userRepository.updateAvatar(url)
+            _userInfo.value = userRepository.getInfo()
         }
     }
 }

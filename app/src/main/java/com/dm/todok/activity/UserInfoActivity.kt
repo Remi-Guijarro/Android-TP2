@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -23,6 +24,8 @@ import java.io.File
 class UserInfoActivity: AppCompatActivity() {
     private val CAMERA_PERMISSION_CODE = 101
     private lateinit var binding: ActivityUserinfoBinding
+
+    val userViewModel: UserViewModel by viewModels()
 
     // register
     private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { picture ->
@@ -44,14 +47,18 @@ class UserInfoActivity: AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.lifecycleOwner = this
+
         binding.takePictureButton.setOnClickListener {
             askCameraPermissionAndOpenCamera()
         }
 
         // Todo (geoffrey): find a better way to avoid calling user service
         lifecycleScope.launch {
-            val userInfo = Api.userWebService.getInfo().body()
-            binding.imageView.load(userInfo?.avatar)
+
+            binding.userViewModel = userViewModel
+            //val userInfo = Api.userWebService.getInfo().body()
+            //binding.imageView.load(userInfo?.avatar)
         }
     }
 
@@ -70,9 +77,8 @@ class UserInfoActivity: AppCompatActivity() {
     }
 
     private fun handleImage(photoUri: Uri) {
-        // Todo (geoffrey): Find a fix to this workaround
-        UserViewModel().updateAvatar(photoUri)
-        finish()
+        userViewModel.updateAvatar(photoUri)
+       // Api.userWebService.updateAvatar(photoUri)
     }
 
     private fun showExplanationDialog() {

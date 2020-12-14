@@ -11,6 +11,13 @@ import coil.transform.CircleCropTransformation
 @BindingAdapter("app:avatar")
 fun setAvatar(imageView: ImageView, avatarUrl: String?) {
     imageView.load(avatarUrl) {
+        size(1000)
+    }
+}
+
+@BindingAdapter("app:avatar_thumbnail")
+fun setAvatarThumbnail(imageView: ImageView, avatarUrl: String?) {
+    imageView.load(avatarUrl) {
         transformations(CircleCropTransformation())
         size(350)
     }
