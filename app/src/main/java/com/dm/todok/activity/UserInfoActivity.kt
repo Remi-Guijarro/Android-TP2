@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,15 +14,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import com.dm.todok.ui.user.UserViewModel
 import com.dm.todok.databinding.ActivityUserinfoBinding
+import com.dm.todok.network.Api
+import com.dm.todok.ui.user.UserViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 
 class UserInfoActivity: AppCompatActivity() {
     private val CAMERA_PERMISSION_CODE = 101
     private lateinit var binding: ActivityUserinfoBinding
-    private val userViewModel: UserViewModel by viewModels()
 
     // register
     private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { picture ->
@@ -49,8 +48,9 @@ class UserInfoActivity: AppCompatActivity() {
             askCameraPermissionAndOpenCamera()
         }
 
+        // Todo (geoffrey): find a better way to avoid calling user service
         lifecycleScope.launch {
-            val userInfo = userViewModel.userInfo.value
+            val userInfo = Api.userWebService.getInfo().body()
             binding.imageView.load(userInfo?.avatar)
         }
     }
@@ -69,8 +69,10 @@ class UserInfoActivity: AppCompatActivity() {
             this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_CODE)
     }
 
-    private suspend fun handleImage(photoUri: Uri) {
-        userViewModel.updateAvatar(photoUri)
+    private fun handleImage(photoUri: Uri) {
+        // Todo (geoffrey): Find a fix to this workaround
+        UserViewModel().updateAvatar(photoUri)
+        finish()
     }
 
     private fun showExplanationDialog() {

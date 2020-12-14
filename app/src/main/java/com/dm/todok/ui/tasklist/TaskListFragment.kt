@@ -64,6 +64,7 @@ class TaskListFragment : Fragment() {
     private fun bindModels() {
         userViewModel.userInfo.observe(viewLifecycleOwner, {
             binding.userViewModel = userViewModel
+
         })
         binding.taskListViewModel = taskListViewModel
     }
