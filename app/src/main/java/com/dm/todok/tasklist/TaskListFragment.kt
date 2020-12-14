@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.dm.todok.UserViewModel
 import com.dm.todok.databinding.FragmentTaskListBinding
 import com.dm.todok.network.Api
 import com.dm.todok.task.TaskActivity
@@ -29,6 +31,7 @@ class TaskListFragment : Fragment() {
 
     // Todo (geoffrey): difference with val viewModel = TaskListViewModel()
     private val taskListViewModel: TaskListViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,23 +45,22 @@ class TaskListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        taskListViewModel.loadTasks()
-
-        // Todo (geoffrey): move to user's view model
-        lifecycleScope.launch {
-            val userInfo = Api.userWebService.getInfo().body()
-            binding.user = userInfo
-            binding.userAvatar.load(userInfo?.avatar) {
-                transformations(CircleCropTransformation())
-            }
-        }
+        taskListViewModel.refreshTasks()
+        userViewModel.refreshUserInfo()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        userViewModel.userInfo.observe(viewLifecycleOwner, {
+            binding.userViewModel = userViewModel
+        })
         binding.taskListViewModel = taskListViewModel
         binding.recyclerView.adapter = taskListAdapter
+
+        taskListViewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newList ->
+            taskListAdapter.submitList(newList)
+        })
 
         binding.addTaskButton.setOnClickListener {
             val intent = Intent(activity, TaskActivity::class.java)

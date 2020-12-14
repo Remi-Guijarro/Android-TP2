@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,6 +16,7 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import coil.load
+import com.dm.todok.UserViewModel
 import com.dm.todok.databinding.ActivityUserinfoBinding
 import com.dm.todok.network.Api
 import com.dm.todok.network.UserWebService
@@ -26,7 +28,7 @@ import java.io.File
 class UserInfoActivity: AppCompatActivity() {
     private val CAMERA_PERMISSION_CODE = 101
     private lateinit var binding: ActivityUserinfoBinding
-    private val userWebService: UserWebService = Api.userWebService
+    private val userViewModel: UserViewModel by viewModels()
 
     // register
     private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { picture ->
@@ -53,7 +55,7 @@ class UserInfoActivity: AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            val userInfo = userWebService.getInfo().body()
+            val userInfo = userViewModel.userInfo.value
             binding.imageView.load(userInfo?.avatar)
         }
     }
@@ -73,7 +75,7 @@ class UserInfoActivity: AppCompatActivity() {
     }
 
     private suspend fun handleImage(photoUri: Uri) {
-        userWebService.updateAvatar(convert(photoUri))
+        userViewModel.updateAvatar(photoUri)
     }
 
     private fun showExplanationDialog() {
@@ -87,11 +89,4 @@ class UserInfoActivity: AppCompatActivity() {
         }
     }
 
-    private fun convert(uri: Uri) = MultipartBody
-        .Part
-        .createFormData(
-            name = "avatar",
-            filename = "temp.jpeg",
-            body = uri.toFile().asRequestBody()
-        )
 }
