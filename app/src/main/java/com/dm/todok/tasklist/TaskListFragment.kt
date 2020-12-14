@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.dm.todok.databinding.FragmentTaskListBinding
 import com.dm.todok.network.Api
 import com.dm.todok.task.TaskActivity
@@ -47,6 +49,9 @@ class TaskListFragment : Fragment() {
         lifecycleScope.launch {
             val userInfo = Api.userService.getInfo().body()
             binding.user = userInfo
+        }
+        binding.userAvatar.load("https://s1.qwant.com/thumbr/0x0/2/1/a5246dfdd4da59903560ad9218ed12dad6cdc771e9b88970afdf4c5c6ecf47/Nicolas-Sarkozy-@-France-24.jpg?u=https%3A%2F%2Fbeninwebtv.com%2Fwp-content%2Fuploads%2F2020%2F07%2FNicolas-Sarkozy-%40-France-24.jpg&q=0&b=1&p=0&a=1") {
+            transformations(CircleCropTransformation())
         }
     }
 
