@@ -1,4 +1,4 @@
-package com.dm.todok.tasklist
+package com.dm.todok.ui.tasklist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dm.todok.R
 import com.dm.todok.databinding.ItemTaskBinding
-import kotlin.properties.Delegates
+import com.dm.todok.model.Task
 
 class TaskListAdapter() : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback) {
     companion object DiffCallback : DiffUtil.ItemCallback<Task>() {

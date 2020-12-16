@@ -1,15 +1,24 @@
 package com.dm.todok
 
+import android.widget.ImageView
+import androidx.core.view.updatePaddingRelative
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.dm.todok.tasklist.TaskListAdapter
+import coil.load
+import coil.metadata
+import coil.size.Size
+import coil.transform.CircleCropTransformation
 
-@BindingAdapter("task_list_adapter")
-fun setTaskListAdapter(recyclerView: RecyclerView, adapter: TaskListAdapter) {
-    recyclerView.adapter = adapter
+@BindingAdapter("app:avatar")
+fun setAvatar(imageView: ImageView, avatarUrl: String?) {
+    imageView.load(avatarUrl) {
+        size(1000)
+    }
 }
 
-@BindingAdapter("layout_manager")
-fun setLayoutManager(recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) {
-    recyclerView.layoutManager = layoutManager
+@BindingAdapter("app:avatar_thumbnail")
+fun setAvatarThumbnail(imageView: ImageView, avatarUrl: String?) {
+    imageView.load(avatarUrl) {
+        transformations(CircleCropTransformation())
+        size(350)
+    }
 }

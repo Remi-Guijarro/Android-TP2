@@ -1,10 +1,11 @@
-package com.dm.todok.tasklist
+package com.dm.todok.ui.tasklist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dm.todok.network.TaskRepository
+import com.dm.todok.data.TaskRepository
+import com.dm.todok.model.Task
 import kotlinx.coroutines.launch
 
 class TaskListViewModel : ViewModel() {
@@ -20,7 +21,7 @@ class TaskListViewModel : ViewModel() {
 
     private fun getMutableList() = _taskList.value.orEmpty().toMutableList()
 
-    fun loadTasks() {
+    fun refreshTasks() {
         viewModelScope.launch {
             val tasks = taskRepository.loadTasks()
             _taskList.value = tasks.orEmpty()

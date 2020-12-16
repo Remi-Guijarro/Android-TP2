@@ -1,4 +1,4 @@
-package com.dm.todok.network
+package com.dm.todok.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

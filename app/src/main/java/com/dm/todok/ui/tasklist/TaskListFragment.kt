@@ -1,4 +1,4 @@
-package com.dm.todok.tasklist
+package com.dm.todok.ui.tasklist
 
 import android.app.Activity
 import android.content.Intent
@@ -8,29 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import coil.load
-import coil.transform.CircleCropTransformation
+import com.dm.todok.ui.user.UserViewModel
 import com.dm.todok.databinding.FragmentTaskListBinding
-import com.dm.todok.network.Api
-import com.dm.todok.task.TaskActivity
-import com.dm.todok.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
-import com.dm.todok.task.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
-import com.dm.todok.task.TaskActivity.Companion.TASK_KEY
-import com.dm.todok.userinfo.UserInfoActivity
-import kotlinx.coroutines.launch
+import com.dm.todok.model.Task
+import com.dm.todok.activity.TaskActivity
+import com.dm.todok.activity.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
+import com.dm.todok.activity.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
+import com.dm.todok.activity.TaskActivity.Companion.TASK_KEY
+import com.dm.todok.activity.UserInfoActivity
 
 class TaskListFragment : Fragment() {
     // View binding support in Fragment
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
 
-    val taskListAdapter: TaskListAdapter = TaskListAdapter()
-    val layoutManager: LinearLayoutManager =  LinearLayoutManager(activity)
+    private val taskListAdapter: TaskListAdapter = TaskListAdapter()
 
-    // Todo (geoffrey): difference with val viewModel = TaskListViewModel()
-    private val viewModel: TaskListViewModel by viewModels()
+    private val taskListViewModel: TaskListViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,25 +39,40 @@ class TaskListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadTasks()
+        refreshModels()
+    }
 
-        // Todo (geoffrey): move to user's view model
-        lifecycleScope.launch {
-            val userInfo = Api.userWebService.getInfo().body()
-            binding.user = userInfo
-            binding.userAvatar.load(userInfo?.avatar) {
-                transformations(CircleCropTransformation())
-            }
-        }
-
+    private fun refreshModels() {
+        taskListViewModel.refreshTasks()
+        userViewModel.refreshUserInfo()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Todo (geoffrey): Bind to Fragment ?
-        binding.taskListFragment = this
+        binding.recyclerView.adapter = taskListAdapter
+        binding.lifecycleOwner = this
 
+        bindModels()
+
+        setClickListeners()
+        setAdapterCallbacks()
+
+        taskListViewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newList ->
+            taskListAdapter.submitList(newList)
+        })
+    }
+
+    private fun bindModels() {
+        userViewModel.userInfo.observe(viewLifecycleOwner, {
+            binding.executePendingBindings()
+            binding.userViewModel = userViewModel
+        })
+        binding.userViewModel = userViewModel
+        binding.taskListViewModel = taskListViewModel
+    }
+
+    private fun setClickListeners() {
         binding.addTaskButton.setOnClickListener {
             val intent = Intent(activity, TaskActivity::class.java)
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
@@ -72,20 +82,18 @@ class TaskListFragment : Fragment() {
             val intent = Intent(activity, UserInfoActivity::class.java)
             startActivityForResult(intent, 0)
         }
+    }
 
+    private fun setAdapterCallbacks() {
         taskListAdapter.onDeleteTask = { task ->
-            viewModel.deleteTask(task)
+            taskListViewModel.deleteTask(task)
         }
 
         taskListAdapter.onEditTask = { task ->
-                val intent = Intent(activity, TaskActivity::class.java)
-                intent.putExtra(TASK_KEY, task)
-                startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
+            val intent = Intent(activity, TaskActivity::class.java)
+            intent.putExtra(TASK_KEY, task)
+            startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
         }
-
-        viewModel.taskList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newList ->
-            taskListAdapter.submitList(newList)
-        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -95,13 +103,13 @@ class TaskListFragment : Fragment() {
             && resultCode == Activity.RESULT_OK
         ) {
             val newTask = data!!.getSerializableExtra(TASK_KEY) as Task
-            viewModel.createTask(newTask)
+            taskListViewModel.createTask(newTask)
         }
         else if (requestCode == EDIT_TASK_REQUEST_CODE
             && resultCode == Activity.RESULT_OK
         ) {
             val updatedTask = data!!.getSerializableExtra(TASK_KEY) as Task
-            viewModel.updateTask(updatedTask)
+            taskListViewModel.updateTask(updatedTask)
         }
     }
 

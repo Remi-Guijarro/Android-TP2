@@ -1,4 +1,4 @@
-package com.dm.todok.tasklist
+package com.dm.todok.model
 
 import kotlinx.serialization.SerialName
 
