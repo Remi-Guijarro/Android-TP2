@@ -1,4 +1,7 @@
 package com.dm.todok.activity
 
-class AuthenticationActivity {
+import androidx.appcompat.app.AppCompatActivity
+
+class AuthenticationActivity : AppCompatActivity() {
+
 }
