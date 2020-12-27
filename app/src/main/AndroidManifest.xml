@@ -22,5 +22,4 @@
         <activity android:name="com.dm.todok.activity.UserInfoActivity" />
 
     </application>
-
 </manifest>
