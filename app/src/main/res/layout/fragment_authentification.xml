@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="base_auth_layout"
-        android:text="Button"
+        android:text="@string/log_in"
         tools:layout_editor_absoluteX="159dp"
         tools:layout_editor_absoluteY="213dp" />
 
@@ -20,7 +20,7 @@
         android:id="@+id/log_in_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="@string/sign_in"
         app:layout_constraintTop_toBottomOf="@+id/sign_in_button"
         tools:layout_editor_absoluteX="158dp"
         tools:layout_editor_absoluteY="276dp" />
