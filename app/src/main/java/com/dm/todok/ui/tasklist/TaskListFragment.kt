@@ -6,8 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.NavHostFragment
+import androidx.preference.PreferenceManager
+import com.dm.todok.R
+import com.dm.todok.SHARED_PREF_TOKEN_KEY
 import com.dm.todok.ui.user.UserViewModel
 import com.dm.todok.databinding.FragmentTaskListBinding
 import com.dm.todok.model.Task
@@ -81,6 +87,13 @@ class TaskListFragment : Fragment() {
         binding.userAvatar.setOnClickListener {
             val intent = Intent(activity, UserInfoActivity::class.java)
             startActivityForResult(intent, 0)
+        }
+
+        binding.logoutButton.setOnClickListener {
+            PreferenceManager.getDefaultSharedPreferences(context).edit {
+                remove(SHARED_PREF_TOKEN_KEY)
+            }
+            NavHostFragment.findNavController(this).navigate(R.id.action_taskListFragment_to_authenticationFragment)
         }
     }
 

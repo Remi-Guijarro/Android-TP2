@@ -24,6 +24,9 @@ class UserViewModel : ViewModel() {
     private fun loadUserInfo() {
         viewModelScope.launch {
             _userInfo.value = userRepository.getInfo()
+            if(_userInfo.value?.avatar == null || _userInfo.value?.avatar == "") {
+                _userInfo.value?.avatar = "https://stores-et-motorisation.com/assets/img/installateurs/installateur-no-image.png"
+            }
         }
     }
 

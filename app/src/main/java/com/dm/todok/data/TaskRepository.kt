@@ -4,7 +4,7 @@ import com.dm.todok.network.Api
 import com.dm.todok.model.Task
 
 class TaskRepository {
-    private val taskWebService = Api.taskWebService
+    private val taskWebService = Api.INSTANCE.taskWebService
 
     suspend fun loadTasks(): List<Task>? {
         val response = taskWebService.getTasks()
