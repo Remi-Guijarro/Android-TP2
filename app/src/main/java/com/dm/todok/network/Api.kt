@@ -55,7 +55,7 @@ class Api(private val context: Context) {
         retrofit.create(TaskWebService::class.java)
     }
 
-    private fun getToken() {
-        PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREF_TOKEN_KEY, "")
+    private fun getToken(): String {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREF_TOKEN_KEY, "").toString()
     }
 }

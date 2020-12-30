@@ -8,4 +8,6 @@
     <string name="password_confirmation">Password confirmation</string>
     <string name="password">Password</string>
     <string name="mail_example">test@gmail.fr</string>
+    <string name="email">Email</string>
+    <string name="logout">Logout</string>
 </resources>
