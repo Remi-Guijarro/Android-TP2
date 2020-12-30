@@ -16,9 +16,17 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.dm.todok.ui.authentification.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_taskListFragment"
+            app:destination="@id/taskListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.dm.todok.ui.authentification.SignupFragment"
         android:label="SignupFragment" />
+    <fragment
+        android:id="@+id/taskListFragment"
+        android:name="com.dm.todok.ui.tasklist.TaskListFragment"
+        android:label="TaskListFragment" />
 </navigation>

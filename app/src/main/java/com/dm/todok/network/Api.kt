@@ -1,16 +1,21 @@
 package com.dm.todok.network
 
+import android.content.Context
+import androidx.preference.PreferenceManager
+import com.dm.todok.SHARED_PREF_TOKEN_KEY
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-object Api {
+class Api(private val context: Context) {
 
+    companion object {
+        private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
+        lateinit var INSTANCE: Api
+    }
     // constantes qui serviront à faire les requêtes
-    private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
-    private const val TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozMDMsImV4cCI6MTYzOTIyMzE2NH0.nTwijRqShcOkLeguucMBBcIeyyaDFhO7qKwx4uM1p9I"
 
     // on construit une instance de parseur de JSON:
     private val jsonSerializer = Json {
@@ -28,7 +33,7 @@ object Api {
                 .addInterceptor { chain ->
                     // intercepteur qui ajoute le `header` d'authentification avec votre token:
                     val newRequest = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer $TOKEN")
+                            .addHeader("Authorization", "Bearer ${getToken()}")
                             .build()
                     chain.proceed(newRequest)
                 }
@@ -48,5 +53,9 @@ object Api {
 
     val taskWebService: TaskWebService by lazy {
         retrofit.create(TaskWebService::class.java)
+    }
+
+    private fun getToken() {
+        PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREF_TOKEN_KEY, "")
     }
 }

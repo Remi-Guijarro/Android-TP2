@@ -2,14 +2,16 @@ package com.dm.todok.data
 
 import android.net.Uri
 import androidx.core.net.toFile
+import com.dm.todok.model.LoginForm
 import com.dm.todok.network.Api
 import com.dm.todok.model.UserInfo
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import retrofit2.http.Body
 
 class UserRepository {
 
-    private val userWebService = Api.userWebService
+    private val userWebService = Api.INSTANCE.userWebService
 
     suspend fun getInfo(): UserInfo? {
         val response = userWebService.getInfo()
