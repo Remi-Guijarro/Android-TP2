@@ -19,13 +19,14 @@ import com.dm.todok.databinding.ActivityUserinfoBinding
 import com.dm.todok.network.Api
 import com.dm.todok.ui.user.UserViewModel
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
 class UserInfoActivity: AppCompatActivity() {
     private val CAMERA_PERMISSION_CODE = 101
     private lateinit var binding: ActivityUserinfoBinding
 
-    val userViewModel: UserViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModel()
 
     // register
     private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { picture ->
@@ -78,7 +79,6 @@ class UserInfoActivity: AppCompatActivity() {
 
     private fun handleImage(photoUri: Uri) {
         userViewModel.updateAvatar(photoUri)
-       // Api.userWebService.updateAvatar(photoUri)
     }
 
     private fun showExplanationDialog() {

@@ -13,15 +13,15 @@ import androidx.preference.PreferenceManager
 import com.dm.todok.R
 import com.dm.todok.SHARED_PREF_TOKEN_KEY
 import com.dm.todok.data.UserRepository
+import com.dm.todok.data.UserRepositoryHttp
 import com.dm.todok.databinding.FragmentSignupBinding
 import com.dm.todok.form.SignUpForm
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 
 class SignupFragment : Fragment() {
     private var _binding: FragmentSignupBinding? = null
     private val binding get() = _binding!!
-
-    private val userRepository = UserRepository()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSignupBinding.inflate(inflater, container, false)
@@ -51,6 +51,7 @@ class SignupFragment : Fragment() {
 
                     val fragment = this
                     lifecycleScope.launch {
+                        val userRepository: UserRepository = get()
                         val responses = userRepository.signUp(signUpForm)
                         if (responses.second != null && !responses.second!!.errors.isNullOrEmpty()) {
                             Toast.makeText(context, responses.second!!.errors[0], Toast.LENGTH_SHORT).show()
