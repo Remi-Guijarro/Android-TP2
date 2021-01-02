@@ -22,6 +22,7 @@ import com.dm.todok.activity.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.dm.todok.activity.TaskActivity.Companion.EDIT_TASK_REQUEST_CODE
 import com.dm.todok.activity.TaskActivity.Companion.TASK_KEY
 import com.dm.todok.activity.UserInfoActivity
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class TaskListFragment : Fragment() {
     // View binding support in Fragment
@@ -30,8 +31,8 @@ class TaskListFragment : Fragment() {
 
     private val taskListAdapter: TaskListAdapter = TaskListAdapter()
 
-    private val taskListViewModel: TaskListViewModel by viewModels()
-    private val userViewModel: UserViewModel by viewModels()
+    private val taskListViewModel: TaskListViewModel by viewModel()
+    private val userViewModel: UserViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

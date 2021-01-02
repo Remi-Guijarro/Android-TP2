@@ -4,13 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dm.todok.data.TaskRepository
 import com.dm.todok.model.Task
+import com.dm.todok.usecases.TaskUseCases
 import kotlinx.coroutines.launch
 
-class TaskListViewModel : ViewModel() {
-
-    private val taskRepository = TaskRepository()
+class TaskListViewModel(private val taskInteractor: TaskUseCases) : ViewModel() {
 
     // Ces deux variables encapsulent la même donnée:
     // [_taskList] est modifiable mais privée donc inaccessible à l'extérieur de cette classe
@@ -23,14 +21,14 @@ class TaskListViewModel : ViewModel() {
 
     fun refreshTasks() {
         viewModelScope.launch {
-            val tasks = taskRepository.loadTasks()
+            val tasks = taskInteractor.getNumberOfTasks(3)
             _taskList.value = tasks.orEmpty()
         }
     }
 
     fun createTask(task: Task) {
         viewModelScope.launch {
-            taskRepository.createTask(task)?.let { task ->
+            taskInteractor.createTask(task)?.let { task ->
                 val mutableList = getMutableList()
                 mutableList.add(task)
                 _taskList.value = mutableList
@@ -40,7 +38,7 @@ class TaskListViewModel : ViewModel() {
 
     fun deleteTask(task: Task) {
         viewModelScope.launch {
-            if (taskRepository.deleteTask(task)) {
+            if (taskInteractor.deleteTask(task)) {
                 val mutableList = getMutableList()
                 mutableList.remove(task)
                 _taskList.value = mutableList
@@ -50,7 +48,7 @@ class TaskListViewModel : ViewModel() {
 
     fun updateTask(task: Task) {
         viewModelScope.launch {
-            taskRepository.updateTask(task)?.let { task ->
+            taskInteractor.updateTask(task)?.let { task ->
                 val mutableList = getMutableList()
                 val position = mutableList.indexOfFirst { task.id == it.id }
                 mutableList[position] = task
